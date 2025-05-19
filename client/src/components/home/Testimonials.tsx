@@ -47,7 +47,7 @@ export function Testimonials() {
       id: 1,
       name: "Sarah Johnson",
       role: "Food Critic",
-      image: "https://images.unsplash.com/photo-1504593811423-6dd665756598?ixlib=rb-4.0.3&auto=format&fit=crop&w=120&h=120",
+      image: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?ixlib=rb-4.0.3&auto=format&fit=crop&w=120&h=120",
       rating: 5,
       comment: "The dining experience at Gusto was nothing short of exceptional. From the moment we walked in, the staff treated us like royalty. Each dish was a masterpiece, both visually and in flavor. We'll definitely be back!"
     },
@@ -66,6 +66,22 @@ export function Testimonials() {
       image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-4.0.3&auto=format&fit=crop&w=120&h=120",
       rating: 4.5,
       comment: "The ambiance alone is worth the visit - so elegant yet comfortable. Chef Alessandro's seasonal menu showcases fresh ingredients in creative ways. The wine pairing recommendations were spot on. A true culinary destination."
+    },
+    {
+      id: 4,
+      name: "John Anderson",
+      role: "Wine Enthusiast",
+      image: "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?ixlib=rb-4.0.3&auto=format&fit=crop&w=120&h=120",
+      rating: 5,
+      comment: "As a wine enthusiast, I was blown away by Gusto's curated selection. Their sommelier paired the perfect vintage with our meal, enhancing every bite. The ambiance and service were equally impressive."
+    },
+    {
+      id: 5,
+      name: "Lisa Tanaka",
+      role: "Local Foodie",
+      image: "https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?ixlib=rb-4.0.3&auto=format&fit=crop&w=120&h=120",
+      rating: 4.5,
+      comment: "I've dined at Gusto multiple times and each visit exceeds my expectations. The seasonal menu is always exciting, and their attention to locally-sourced ingredients makes every dish special. The Aged Ribeye is a must-try!"
     }
   ];
   
@@ -88,18 +104,18 @@ export function Testimonials() {
           >
             {displayTestimonials.map((testimonial) => (
               <div key={testimonial.id} className="testimonial-slide min-w-full md:min-w-[33.333%] px-4 snap-center">
-                <div className="bg-neutral p-8 rounded-lg shadow-sm">
+                <div className="bg-neutral p-8 rounded-lg shadow-md hover:shadow-lg transition-all border border-gray-100">
                   <div className="flex items-center mb-4">
                     <div className="text-accent text-xl">
                       {generateStars(testimonial.rating)}
                     </div>
                   </div>
-                  <p className="text-gray-700 italic mb-6">"{testimonial.comment}"</p>
+                  <p className="text-gray-700 italic mb-6 leading-relaxed">"{testimonial.comment}"</p>
                   <div className="flex items-center">
                     <img 
                       src={testimonial.image} 
                       alt={`${testimonial.name} portrait`} 
-                      className="w-12 h-12 rounded-full object-cover" 
+                      className="w-12 h-12 rounded-full object-cover border-2 border-accent" 
                     />
                     <div className="ml-4">
                       <h4 className="font-display font-semibold">{testimonial.name}</h4>

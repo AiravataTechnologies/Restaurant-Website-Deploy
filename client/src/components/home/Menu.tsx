@@ -69,6 +69,12 @@ export function Menu() {
           <span className="text-accent font-script text-3xl">Culinary Delights</span>
           <h2 className="font-display text-4xl font-bold mt-2 mb-6">Our Menu</h2>
           <div className="w-20 h-1 bg-accent mx-auto mb-10"></div>
+          <a 
+            href="#" 
+            className="inline-block mt-4 mb-8 border-2 border-accent text-accent hover:bg-accent hover:text-white py-2 px-6 rounded-sm uppercase text-sm tracking-wider font-medium transition-all"
+          >
+            <i className="fas fa-download mr-2"></i> Download Full Menu
+          </a>
           
           {/* Filter Buttons */}
           <div className="flex flex-wrap justify-center gap-4 mb-10" ref={filterRef}>
@@ -170,8 +176,9 @@ export function Menu() {
                           <h4 className="font-display font-semibold text-lg mr-2">{item.name}</h4>
                           {item.tags.map((tag) => {
                             let bgColor = 'bg-accent';
-                            if (tag === 'Spicy') bgColor = 'bg-error';
-                            if (tag === 'Gluten Free' || tag === 'Signature') bgColor = 'bg-secondary';
+                            if (tag === 'Spicy') bgColor = 'bg-red-500';
+                            if (tag === 'Gluten Free') bgColor = 'bg-green-600';
+                            if (tag === 'Signature') bgColor = 'bg-secondary';
                             
                             return (
                               <span key={tag} className={`${bgColor} text-white text-xs px-2 py-1 rounded-full mr-1`}>
@@ -184,11 +191,11 @@ export function Menu() {
                         <div className="text-accent font-semibold mt-2">${item.price}</div>
                         
                         {/* Hover Preview */}
-                        <div className="menu-preview absolute left-0 bottom-full mb-2 z-40 w-48 h-48 bg-white rounded-lg shadow-xl overflow-hidden">
+                        <div className="menu-preview absolute left-0 bottom-full mb-2 z-40 w-60 h-48 bg-white rounded-lg shadow-xl overflow-hidden">
                           <img src={item.image} alt={item.name} className="w-full h-full object-cover" />
                         </div>
                       </div>
-                      <div className="flex-shrink-0 w-16 h-16 rounded-full overflow-hidden">
+                      <div className="flex-shrink-0 w-16 h-16 rounded-full overflow-hidden border-2 border-accent">
                         <img src={item.thumbnail} alt={`${item.name} thumbnail`} className="w-full h-full object-cover" />
                       </div>
                     </div>
