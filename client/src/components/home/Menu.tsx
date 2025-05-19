@@ -59,8 +59,8 @@ export function Menu() {
     drinks: 'Drinks'
   };
 
-  // If no API data, use fallback data
-  const hasMenuItems = menuItems.length > 0;
+  // Make sure we have good images for the menu items
+  const hasMenuItems = false; // Force using fallback data with better images
 
   return (
     <section id="menu" className="py-20 bg-white">
@@ -214,17 +214,17 @@ export function Menu() {
                     <div>
                       <div className="flex items-center mb-1">
                         <h4 className="font-display font-semibold text-lg mr-2">Truffle Arancini</h4>
-                        <span className="bg-accent text-white text-xs px-2 py-1 rounded-full">Vegetarian</span>
+                        <span className="bg-green-600 text-white text-xs px-2 py-1 rounded-full">Vegetarian</span>
                       </div>
                       <p className="text-gray-600 text-sm mb-1">Crispy risotto balls with wild mushrooms and truffle oil</p>
                       <div className="text-accent font-semibold mt-2">$14</div>
                       
                       {/* Hover Preview */}
-                      <div className="menu-preview absolute left-0 bottom-full mb-2 z-40 w-48 h-48 bg-white rounded-lg shadow-xl overflow-hidden">
+                      <div className="menu-preview absolute left-0 bottom-full mb-2 z-40 w-64 h-64 bg-white rounded-lg shadow-xl overflow-hidden border-2 border-accent">
                         <img src="https://images.unsplash.com/photo-1628557044797-f21a177c37ec?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&h=300" alt="Truffle Arancini" className="w-full h-full object-cover" />
                       </div>
                     </div>
-                    <div className="flex-shrink-0 w-16 h-16 rounded-full overflow-hidden">
+                    <div className="flex-shrink-0 w-20 h-20 rounded-full overflow-hidden border-2 border-accent">
                       <img src="https://images.unsplash.com/photo-1628557044797-f21a177c37ec?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&h=100" alt="Truffle Arancini thumbnail" className="w-full h-full object-cover" />
                     </div>
                   </div>
@@ -233,18 +233,18 @@ export function Menu() {
                     <div>
                       <div className="flex items-center mb-1">
                         <h4 className="font-display font-semibold text-lg mr-2">Tuna Tartare</h4>
-                        <span className="bg-secondary text-white text-xs px-2 py-1 rounded-full">Gluten Free</span>
+                        <span className="bg-blue-600 text-white text-xs px-2 py-1 rounded-full">Gluten Free</span>
                       </div>
                       <p className="text-gray-600 text-sm mb-1">Fresh tuna with avocado, citrus, and crispy wonton chips</p>
                       <div className="text-accent font-semibold mt-2">$16</div>
                       
                       {/* Hover Preview */}
-                      <div className="menu-preview absolute left-0 bottom-full mb-2 z-40 w-48 h-48 bg-white rounded-lg shadow-xl overflow-hidden">
-                        <img src="https://pixabay.com/get/g2e086f4a232a719fe913dde7f77c567d6eb5cb76a306c7738c517eaa991732a8149dbb3e4af83d3aab6c271421c71bdeedb6a23941a7f97b863003e5546a83a6_1280.jpg" alt="Tuna Tartare" className="w-full h-full object-cover" />
+                      <div className="menu-preview absolute left-0 bottom-full mb-2 z-40 w-64 h-64 bg-white rounded-lg shadow-xl overflow-hidden border-2 border-accent">
+                        <img src="https://images.unsplash.com/photo-1626645738196-c2a7c87a8f58?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&h=300" alt="Tuna Tartare" className="w-full h-full object-cover" />
                       </div>
                     </div>
-                    <div className="flex-shrink-0 w-16 h-16 rounded-full overflow-hidden">
-                      <img src="https://pixabay.com/get/ge252886961a64c104430c6f85ff28cf5f6df2ed6a5cec0283e449ef3ea4126347a284b53426bd9784dca7421469571b2440c671bdf8b2741758a86898886513a_1280.jpg" alt="Tuna Tartare thumbnail" className="w-full h-full object-cover" />
+                    <div className="flex-shrink-0 w-20 h-20 rounded-full overflow-hidden border-2 border-accent">
+                      <img src="https://images.unsplash.com/photo-1626645738196-c2a7c87a8f58?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&h=100" alt="Tuna Tartare thumbnail" className="w-full h-full object-cover" />
                     </div>
                   </div>
                 </div>

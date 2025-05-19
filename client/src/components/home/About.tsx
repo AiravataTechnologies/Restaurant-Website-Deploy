@@ -18,7 +18,7 @@ export function About() {
           <div className="fade-in" ref={imageRef}>
             <div className="relative">
               <img 
-                src="https://images.unsplash.com/photo-1607877361964-d8c3b428147e?q=80&w=2574&auto=format&fit=crop" 
+                src="https://images.unsplash.com/photo-1581299894007-aaa50297cf16?q=80&w=3540&auto=format&fit=crop" 
                 alt="Chef plating a gourmet dish" 
                 className="w-full h-auto rounded-lg shadow-lg z-10 relative" 
               />
@@ -53,15 +53,41 @@ export function About() {
               </div>
             </div>
             
-            <div className="flex items-center">
-              <img 
-                src="https://images.unsplash.com/photo-1577219491135-ce391730fb2c?ixlib=rb-4.0.3&auto=format&fit=crop&w=120&h=120" 
-                alt="Chef Alessandro" 
-                className="w-16 h-16 rounded-full object-cover" 
-              />
-              <div className="ml-4">
-                <h4 className="font-display font-semibold">Alessandro Rossi</h4>
-                <p className="text-accent text-sm">Executive Chef</p>
+            <div className="flex flex-wrap gap-6 mt-2">
+              <div className="flex items-center">
+                <img 
+                  src="https://images.unsplash.com/photo-1577219491135-ce391730fb2c?ixlib=rb-4.0.3&auto=format&fit=crop&w=120&h=120" 
+                  alt="Chef Alessandro" 
+                  className="w-16 h-16 rounded-full object-cover border-2 border-accent" 
+                />
+                <div className="ml-4">
+                  <h4 className="font-display font-semibold">Alessandro Rossi</h4>
+                  <p className="text-accent text-sm">Executive Chef</p>
+                </div>
+              </div>
+              
+              <div className="flex items-center">
+                <img 
+                  src="https://images.unsplash.com/photo-1583394293214-28ded15ee548?ixlib=rb-4.0.3&auto=format&fit=crop&w=120&h=120" 
+                  alt="Chef Sofia" 
+                  className="w-16 h-16 rounded-full object-cover border-2 border-accent" 
+                />
+                <div className="ml-4">
+                  <h4 className="font-display font-semibold">Sofia Martinez</h4>
+                  <p className="text-accent text-sm">Pastry Chef</p>
+                </div>
+              </div>
+              
+              <div className="flex items-center">
+                <img 
+                  src="https://images.unsplash.com/photo-1581299894007-aaa50297cf16?ixlib=rb-4.0.3&auto=format&fit=crop&w=120&h=120" 
+                  alt="Chef Marco" 
+                  className="w-16 h-16 rounded-full object-cover border-2 border-accent" 
+                />
+                <div className="ml-4">
+                  <h4 className="font-display font-semibold">Marco Chen</h4>
+                  <p className="text-accent text-sm">Sous Chef</p>
+                </div>
               </div>
             </div>
           </div>
