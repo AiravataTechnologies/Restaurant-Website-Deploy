@@ -48,7 +48,7 @@ export function Header() {
           <div className="hidden md:block">
             <Button 
               onClick={() => handleNavClick('booking')}
-              className="bg-accent hover:bg-opacity-90 transition-all text-white py-2 px-6 rounded-sm uppercase text-sm tracking-wider font-medium"
+              className="bg-accent hover:bg-accent/90 text-white py-2 px-6 rounded-sm uppercase text-sm tracking-wider font-medium hover:text-white"
             >
               Book a Table
             </Button>
@@ -74,7 +74,7 @@ export function Header() {
             <button onClick={() => handleNavClick('contact')} className="text-sm uppercase tracking-wider font-medium hover:text-accent transition-all py-2 border-b border-gray-100">Contact</button>
             <Button
               onClick={() => handleNavClick('booking')}
-              className="bg-accent hover:bg-opacity-90 transition-all text-white py-2 px-6 rounded-sm uppercase text-sm tracking-wider font-medium text-center mt-2"
+              className="bg-accent hover:bg-accent/90 text-white py-2 px-6 rounded-sm uppercase text-sm tracking-wider font-medium text-center mt-2 hover:text-white"
             >
               Book a Table
             </Button>

@@ -18,7 +18,7 @@ export function About() {
           <div className="fade-in" ref={imageRef}>
             <div className="relative">
               <img 
-                src="https://pixabay.com/get/gd315050a64cb8f47a7771da0b69a810b8f97ec1083debc21622ec5e9b09c5330e8cc80c3d9f9528bc88928c0aa6ef1a7ed5fcf007f257e3f6c26f4835f436e04_1280.jpg" 
+                src="https://images.unsplash.com/photo-1607877361964-d8c3b428147e?q=80&w=2574&auto=format&fit=crop" 
                 alt="Chef plating a gourmet dish" 
                 className="w-full h-auto rounded-lg shadow-lg z-10 relative" 
               />
