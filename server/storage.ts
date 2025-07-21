@@ -2,7 +2,7 @@ import {
   users, type User, type InsertUser,
   type MenuItem, type SpecialItem, type Testimonial, 
   type GalleryImage, type TableBooking, type InsertTableBooking
-} from "@shared/schema";
+} from "../shared/schema.js";
 
 export interface IStorage {
   // User methods
