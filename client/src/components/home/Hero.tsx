@@ -4,20 +4,26 @@ import { scrollToSection } from '@/lib/utils';
 export function Hero() {
   return (
     <section id="home" className="relative h-screen overflow-hidden">
-      {/* Background image with overlay */}
-      <div className="absolute inset-0 bg-black">
+      {/* Local video background */}
+      <div className="absolute inset-0">
         <div className="absolute inset-0 bg-black bg-opacity-50 z-10"></div>
-        <img 
-          src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&h=1080" 
-          alt="Premium restaurant interior" 
-          className="object-cover h-full w-full opacity-70" 
-        />
+        
+        <video
+          className="absolute inset-0 w-full h-full object-cover"
+          autoPlay
+          muted
+          loop
+          playsInline
+        >
+          <source src="/cooking.mp4" type="video/mp4" />
+          Your browser does not support the video tag.
+        </video>
       </div>
       
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-20 h-full flex flex-col justify-center items-center text-center text-white">
-        <span className="font-script text-6xl md:text-7xl text-accent mb-4">Gusto</span>
-        <h1 className="font-display text-3xl md:text-5xl font-bold mb-6 max-w-3xl">A culinary journey through exquisite flavors</h1>
-        <p className="text-neutral-200 text-lg md:text-xl mb-10 max-w-2xl">Experience the finest ingredients, expertly crafted into unforgettable dishes in an enchanting atmosphere.</p>
+        <span className="font-script text-8xl md:text-9xl text-accent mb-2">Food Platform</span>
+        <h1 className="font-display text-3xl md:text-5xl font-bold mb-4 max-w-4xl">Flavors of Purity Crafted with Passion</h1>
+        <p className="text-neutral-200 text-lg md:text-xl mb-10 max-w-3xl">At Food Platform, every dish is a tribute to purity and tradition. Crafted with care, rich in flavor, and served with warmth, experience vegetarian dining at its finest.</p>
         <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-6">
           <Button 
             onClick={() => scrollToSection('menu')}

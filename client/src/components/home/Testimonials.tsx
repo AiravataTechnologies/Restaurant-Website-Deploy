@@ -1,156 +1,377 @@
-import { useRef } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
-import { useQuery } from '@tanstack/react-query';
-import { Testimonial } from '@/lib/types';
-import { generateStars } from '@/lib/utils';
-import { useScrollAnimation } from '@/hooks/use-scroll-animation';
+import { ChevronLeft, ChevronRight, Star, StarHalf, Quote } from 'lucide-react';
+
+// Define testimonial type
+export type Testimonial = {
+  id: number;
+  name: string;
+  role: string;
+  image: string;
+  rating: number;
+  comment: string;
+  date?: string;
+}
 
 export function Testimonials() {
   const sliderRef = useRef<HTMLDivElement>(null);
-  const { ref: sectionRef } = useScrollAnimation();
+  const sectionRef = useRef<HTMLDivElement>(null);
+  const [activeSlide, setActiveSlide] = useState(0);
+  const [totalSlides, setTotalSlides] = useState(0);
+  const [isMobile, setIsMobile] = useState(false);
+  const [isTablet, setIsTablet] = useState(false);
 
-  const { data: testimonials = [] } = useQuery<Testimonial[]>({
-    queryKey: ['/api/testimonials'],
-  });
-
-  const slideWidth = () => {
-    if (sliderRef.current) {
-      const slide = sliderRef.current.querySelector('.testimonial-slide');
-      return slide ? slide.clientWidth : 0;
-    }
-    return 0;
-  };
-
-  const scrollPrev = () => {
-    if (sliderRef.current) {
-      sliderRef.current.scrollBy({
-        left: -slideWidth(),
-        behavior: 'smooth'
-      });
-    }
-  };
-
-  const scrollNext = () => {
-    if (sliderRef.current) {
-      sliderRef.current.scrollBy({
-        left: slideWidth(),
-        behavior: 'smooth'
-      });
-    }
-  };
-
-  // If no API data, use fallback testimonials
-  const hasTestimonials = testimonials.length > 0;
-  
-  const fallbackTestimonials: Testimonial[] = [
+  // Enhanced testimonials array with real people images
+  const testimonials: Testimonial[] = [
     {
       id: 1,
       name: "Sarah Johnson",
       role: "Food Critic",
-      image: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?ixlib=rb-4.0.3&auto=format&fit=crop&w=120&h=120",
+      image: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=200&h=200&fit=crop&crop=face",
       rating: 5,
-      comment: "The dining experience at Gusto was nothing short of exceptional. From the moment we walked in, the staff treated us like royalty. Each dish was a masterpiece, both visually and in flavor. We'll definitely be back!"
+      comment: "The dining experience at Gusto was nothing short of exceptional. From the moment we walked in, the staff treated us like royalty. Each dish was a masterpiece, both visually and in flavor. We'll definitely be back!",
+      date: "May 2, 2025"
     },
     {
       id: 2,
       name: "Michael Roberts",
       role: "Regular Customer",
-      image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=120&h=120",
+      image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=200&h=200&fit=crop&crop=face",
       rating: 5,
-      comment: "What a gem! We celebrated our anniversary at Gusto and it was perfect. The Maine Lobster Ravioli was divine, and the staff surprised us with a complimentary dessert. The attention to detail is outstanding."
+      comment: "What a gem! We celebrated our anniversary at Gusto and it was perfect. The Maine Lobster Ravioli was divine, and the staff surprised us with a complimentary dessert. The attention to detail is outstanding.",
+      date: "April 18, 2025"
     },
     {
       id: 3,
       name: "Emily Chen",
       role: "Food Blogger",
-      image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-4.0.3&auto=format&fit=crop&w=120&h=120",
+      image: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=200&h=200&fit=crop&crop=face",
       rating: 4.5,
-      comment: "The ambiance alone is worth the visit - so elegant yet comfortable. Chef Alessandro's seasonal menu showcases fresh ingredients in creative ways. The wine pairing recommendations were spot on. A true culinary destination."
+      comment: "The ambiance alone is worth the visit - so elegant yet comfortable. Chef Alessandro's seasonal menu showcases fresh ingredients in creative ways. The wine pairing recommendations were spot on. A true culinary destination.",
+      date: "April 10, 2025"
     },
     {
       id: 4,
       name: "John Anderson",
       role: "Wine Enthusiast",
-      image: "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?ixlib=rb-4.0.3&auto=format&fit=crop&w=120&h=120",
+      image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&h=200&fit=crop&crop=face",
       rating: 5,
-      comment: "As a wine enthusiast, I was blown away by Gusto's curated selection. Their sommelier paired the perfect vintage with our meal, enhancing every bite. The ambiance and service were equally impressive."
+      comment: "As a wine enthusiast, I was blown away by Gusto's curated selection. Their sommelier paired the perfect vintage with our meal, enhancing every bite. The ambiance and service were equally impressive.",
+      date: "March 28, 2025"
     },
     {
       id: 5,
       name: "Lisa Tanaka",
       role: "Local Foodie",
-      image: "https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?ixlib=rb-4.0.3&auto=format&fit=crop&w=120&h=120",
+      image: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=200&h=200&fit=crop&crop=face",
       rating: 4.5,
-      comment: "I've dined at Gusto multiple times and each visit exceeds my expectations. The seasonal menu is always exciting, and their attention to locally-sourced ingredients makes every dish special. The Aged Ribeye is a must-try!"
+      comment: "I've dined at Gusto multiple times and each visit exceeds my expectations. The seasonal menu is always exciting, and their attention to locally-sourced ingredients makes every dish special. The Aged Ribeye is a must-try!",
+      date: "March 15, 2025"
+    },
+    {
+      id: 6,
+      name: "David Patel",
+      role: "Executive Chef",
+      image: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=200&h=200&fit=crop&crop=face",
+      rating: 5,
+      comment: "As a fellow chef, I appreciate the technical brilliance behind Gusto's cuisine. Their commitment to traditional techniques while incorporating modern twists shows true culinary artistry. The Osso Buco is particularly outstanding.",
+      date: "March 7, 2025"
+    },
+    {
+      id: 7,
+      name: "Olivia Martinez",
+      role: "Event Planner",
+      image: "https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?w=200&h=200&fit=crop&crop=face",
+      rating: 5,
+      comment: "We hosted a corporate dinner at Gusto and it exceeded all expectations. The private dining room was elegant, the custom menu was exceptional, and the service was impeccable. Our clients were thoroughly impressed.",
+      date: "February 22, 2025"
+    },
+    {
+      id: 8,
+      name: "Robert Kim",
+      role: "Culinary Instructor",
+      image: "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=200&h=200&fit=crop&crop=face",
+      rating: 4.5,
+      comment: "Gusto represents the gold standard in Italian dining. Their handmade pasta is among the best I've had outside of Italy. The risotto preparation is textbook perfect - creamy with just the right bite. My students could learn much here.",
+      date: "February 14, 2025"
     }
   ];
-  
-  // Use API data if available, otherwise use fallback
-  const displayTestimonials = hasTestimonials ? testimonials : fallbackTestimonials;
+
+  // Enhanced device detection
+  useEffect(() => {
+    const checkDeviceType = () => {
+      const width = window.innerWidth;
+      setIsMobile(width < 768);
+      setIsTablet(width >= 768 && width < 1024);
+    };
+
+    checkDeviceType();
+    window.addEventListener('resize', checkDeviceType);
+    
+    return () => {
+      window.removeEventListener('resize', checkDeviceType);
+    };
+  }, []);
+
+  // Calculate total slides with improved responsive logic
+  useEffect(() => {
+    if (sliderRef.current && testimonials.length) {
+      let visibleSlides;
+      
+      if (isMobile) {
+        visibleSlides = 1;
+      } else if (isTablet) {
+        visibleSlides = 2;
+      } else {
+        visibleSlides = 3;
+      }
+      
+      const totalSlideCount = Math.max(1, testimonials.length - visibleSlides + 1);
+      setTotalSlides(totalSlideCount);
+    }
+  }, [testimonials, isMobile, isTablet]);
+
+  // Enhanced scroll handling with touch support
+  useEffect(() => {
+    const handleScroll = () => {
+      if (sliderRef.current) {
+        const scrollLeft = sliderRef.current.scrollLeft;
+        const slideWidth = getSlideWidth();
+        if (slideWidth > 0) {
+          const newActiveSlide = Math.round(scrollLeft / slideWidth);
+          setActiveSlide(Math.min(newActiveSlide, totalSlides - 1));
+        }
+      }
+    };
+
+    const slider = sliderRef.current;
+    if (slider) {
+      slider.addEventListener('scroll', handleScroll);
+      return () => slider.removeEventListener('scroll', handleScroll);
+    }
+  }, [totalSlides]);
+
+  const getSlideWidth = () => {
+    if (sliderRef.current) {
+      const containerWidth = sliderRef.current.clientWidth;
+      const gap = 24; // 1.5rem
+      
+      if (isMobile) {
+        return containerWidth;
+      } else if (isTablet) {
+        return (containerWidth - gap) / 2;
+      } else {
+        return (containerWidth - 2 * gap) / 3;
+      }
+    }
+    return 0;
+  };
+
+  const scrollToSlide = (index: number) => {
+    if (sliderRef.current) {
+      const slideWidth = getSlideWidth();
+      const gap = 24; // 1.5rem
+      let scrollPosition;
+      
+      if (isMobile) {
+        scrollPosition = index * slideWidth;
+      } else {
+        scrollPosition = index * (slideWidth + gap);
+      }
+      
+      sliderRef.current.scrollTo({
+        left: scrollPosition,
+        behavior: 'smooth'
+      });
+      setActiveSlide(index);
+    }
+  };
+
+  const scrollPrev = () => {
+    const newIndex = Math.max(0, activeSlide - 1);
+    scrollToSlide(newIndex);
+  };
+
+  const scrollNext = () => {
+    const newIndex = Math.min(totalSlides - 1, activeSlide + 1);
+    scrollToSlide(newIndex);
+  };
+
+  // Generate star rating display with improved styling
+  const generateStars = (rating: number) => {
+    const stars = [];
+    const fullStars = Math.floor(rating);
+    const hasHalfStar = rating % 1 >= 0.5;
+    
+    for (let i = 0; i < fullStars; i++) {
+      stars.push(<Star key={`star-${i}`} className="fill-yellow-400 text-yellow-400" size={16} />);
+    }
+    
+    if (hasHalfStar) {
+      stars.push(<StarHalf key="half-star" className="fill-yellow-400 text-yellow-400" size={16} />);
+    }
+    
+    const remainingStars = 5 - stars.length;
+    for (let i = 0; i < remainingStars; i++) {
+      stars.push(<Star key={`empty-star-${i}`} className="text-gray-300" size={16} />);
+    }
+    
+    return (
+      <div className="flex gap-0.5 items-center">
+        {stars}
+        <span className="ml-2 text-sm text-gray-600 font-medium">{rating}</span>
+      </div>
+    );
+  };
 
   return (
-    <section className="py-20 bg-white">
+    <section className="py-16 sm:py-20 lg:py-24 bg-gradient-to-b from-white to-gray-50">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-16 fade-in" ref={sectionRef}>
-          <span className="text-accent font-script text-3xl">What People Say</span>
-          <h2 className="font-display text-4xl font-bold mt-2 mb-6">Testimonials</h2>
-          <div className="w-20 h-1 bg-accent mx-auto"></div>
+        <div className="text-center mb-12 sm:mb-16" ref={sectionRef}>
+          <span className="text-2xl sm:text-3xl bg-clip-text text-transparent bg-gradient-to-r from-amber-500 to-red-500 font-serif">
+            What Our Guests Say
+          </span>
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold mt-2 mb-4 sm:mb-6 text-gray-800">
+            Guest Experiences
+          </h2>
+          <div className="w-16 sm:w-24 h-1 bg-gradient-to-r from-amber-500 to-red-500 mx-auto rounded-full"></div>
+          <p className="max-w-2xl mx-auto mt-4 sm:mt-6 text-gray-600 text-sm sm:text-base">
+            Discover why our guests keep coming back to Gusto for their special moments and everyday dining pleasures.
+          </p>
         </div>
         
-        <div className="relative fade-in">
+        <div className="relative">
+          {/* Enhanced Navigation Buttons for Desktop/Tablet */}
+          {!isMobile && (
+            <>
+              <Button 
+                onClick={scrollPrev}
+                disabled={activeSlide === 0}
+                className="absolute left-0 top-1/2 transform -translate-y-1/2 -translate-x-4 bg-white p-3 rounded-full shadow-lg text-gray-800 hover:text-amber-600 transition-all z-10 disabled:opacity-40 disabled:cursor-not-allowed hover:scale-105"
+                variant="ghost"
+                size="icon"
+                aria-label="Previous testimonial"
+              >
+                <ChevronLeft size={24} />
+              </Button>
+              
+              <Button 
+                onClick={scrollNext}
+                disabled={activeSlide === totalSlides - 1}
+                className="absolute right-0 top-1/2 transform -translate-y-1/2 translate-x-4 bg-white p-3 rounded-full shadow-lg text-gray-800 hover:text-amber-600 transition-all z-10 disabled:opacity-40 disabled:cursor-not-allowed hover:scale-105"
+                variant="ghost"
+                size="icon"
+                aria-label="Next testimonial"
+              >
+                <ChevronRight size={24} />
+              </Button>
+            </>
+          )}
+          
+          {/* Enhanced Testimonial Slider */}
           <div 
             ref={sliderRef} 
-            className="testimonial-slider flex overflow-x-auto pb-10 snap-x scrollbar-hide"
+            className="flex overflow-x-auto gap-6 pb-8 sm:pb-10 snap-x snap-mandatory"
+            style={{ 
+              scrollbarWidth: 'none', 
+              msOverflowStyle: 'none',
+              WebkitOverflowScrolling: 'touch'
+            }}
           >
-            {displayTestimonials.map((testimonial) => (
-              <div key={testimonial.id} className="testimonial-slide min-w-full md:min-w-[33.333%] px-4 snap-center">
-                <div className="bg-neutral p-8 rounded-lg shadow-md hover:shadow-lg transition-all border border-gray-100">
-                  <div className="flex items-center mb-4">
-                    <div className="text-accent text-xl">
-                      {generateStars(testimonial.rating)}
-                    </div>
+            {testimonials.map((testimonial) => (
+              <div 
+                key={testimonial.id} 
+                className={`flex-shrink-0 snap-center ${
+                  isMobile 
+                    ? 'w-full' 
+                    : isTablet 
+                    ? 'w-[calc(50%-12px)]' 
+                    : 'w-[calc(33.333%-16px)]'
+                }`}
+              >
+                <div className="bg-white p-6 sm:p-8 rounded-xl shadow-md hover:shadow-xl transition-all duration-300 border border-gray-100 h-full flex flex-col relative group hover:-translate-y-1">
+                  <Quote className="absolute top-4 sm:top-6 right-4 sm:right-6 text-gray-200 group-hover:text-amber-200 transition-colors" size={28} />
+                  
+                  <div className="flex items-center justify-between mb-4">
+                    {generateStars(testimonial.rating)}
                   </div>
-                  <p className="text-gray-700 italic mb-6 leading-relaxed">"{testimonial.comment}"</p>
-                  <div className="flex items-center">
-                    <img 
-                      src={testimonial.image} 
-                      alt={`${testimonial.name} portrait`} 
-                      className="w-12 h-12 rounded-full object-cover border-2 border-accent" 
-                    />
-                    <div className="ml-4">
-                      <h4 className="font-display font-semibold">{testimonial.name}</h4>
-                      <p className="text-accent text-sm">{testimonial.role}</p>
+                  
+                  <p className="text-gray-700 italic mb-6 leading-relaxed flex-grow text-sm sm:text-base">
+                    "{testimonial.comment}"
+                  </p>
+                  
+                  <div className="border-t border-gray-100 pt-4 sm:pt-6 mt-4 flex items-center">
+                    <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-full overflow-hidden border-2 border-amber-500 flex-shrink-0">
+                      <img 
+                        src={testimonial.image} 
+                        alt={`${testimonial.name} portrait`} 
+                        className="w-full h-full object-cover" 
+                        loading="lazy"
+                      />
+                    </div>
+                    <div className="ml-3 sm:ml-4 min-w-0">
+                      <h4 className="font-semibold text-gray-800 text-sm sm:text-base truncate">
+                        {testimonial.name}
+                      </h4>
+                      <p className="text-amber-600 text-xs sm:text-sm truncate">
+                        {testimonial.role}
+                      </p>
+                      {testimonial.date && (
+                        <p className="text-gray-400 text-xs mt-1">
+                          {testimonial.date}
+                        </p>
+                      )}
                     </div>
                   </div>
                 </div>
               </div>
             ))}
           </div>
-          
-          <Button 
-            onClick={scrollPrev}
-            className="absolute left-0 top-1/2 transform -translate-y-1/2 bg-white p-2 rounded-full shadow-md text-primary hover:text-accent transition-all hidden md:block z-10"
-            variant="ghost"
-            size="icon"
-          >
-            <i className="fas fa-chevron-left text-xl"></i>
-          </Button>
-          <Button 
-            onClick={scrollNext}
-            className="absolute right-0 top-1/2 transform -translate-y-1/2 bg-white p-2 rounded-full shadow-md text-primary hover:text-accent transition-all hidden md:block z-10"
-            variant="ghost"
-            size="icon"
-          >
-            <i className="fas fa-chevron-right text-xl"></i>
-          </Button>
         </div>
         
-        <div className="flex justify-center mt-8 space-x-2 md:hidden">
-          <span className="h-2 w-2 rounded-full bg-accent"></span>
-          <span className="h-2 w-2 rounded-full bg-gray-300"></span>
-          <span className="h-2 w-2 rounded-full bg-gray-300"></span>
+        {/* Enhanced Pagination with better mobile spacing */}
+        <div className="flex justify-center mt-6 sm:mt-8 space-x-2">
+          {Array.from({ length: Math.min(8, totalSlides) }).map((_, index) => (
+            <button
+              key={index}
+              onClick={() => scrollToSlide(index)}
+              className={`h-2 sm:h-2.5 rounded-full transition-all duration-300 ${
+                activeSlide === index 
+                  ? 'w-6 sm:w-8 bg-amber-500' 
+                  : 'w-2 sm:w-2.5 bg-gray-300 hover:bg-gray-400'
+              }`}
+              aria-label={`Go to testimonial ${index + 1}`}
+            />
+          ))}
+        </div>
+        
+        {/* Enhanced Call to Action */}
+        <div className="mt-12 sm:mt-16 text-center">
+          <p className="text-gray-700 mb-4 sm:mb-6 text-sm sm:text-base">
+            Experience the Gusto difference for yourself
+          </p>
+          <Button className="bg-gradient-to-r from-amber-500 to-red-500 hover:from-amber-600 hover:to-red-600 text-white px-6 sm:px-8 py-3 sm:py-4 rounded-full shadow-md hover:shadow-lg transition-all hover:scale-105 text-sm sm:text-base">
+            Reserve a Table
+          </Button>
         </div>
       </div>
+      
+      {/* Enhanced styles with better mobile support */}
+      <style jsx>{`
+        .container > div:first-child::-webkit-scrollbar {
+          display: none;
+        }
+        
+        @media (max-width: 767px) {
+          .snap-x {
+            scroll-snap-type: x mandatory;
+          }
+          
+          .snap-center {
+            scroll-snap-align: center;
+          }
+        }
+      `}</style>
     </section>
   );
 }

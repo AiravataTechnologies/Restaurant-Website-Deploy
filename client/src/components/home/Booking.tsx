@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
+import emailjs from '@emailjs/browser';
 import { useMutation } from '@tanstack/react-query';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
@@ -9,7 +10,6 @@ import { Form, FormControl, FormField, FormItem, FormLabel } from '@/components/
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { bookTable } from '@/lib/utils';
 import { TableBooking } from '@/lib/types';
 import { useScrollAnimation } from '@/hooks/use-scroll-animation';
 
@@ -25,10 +25,11 @@ const bookingSchema = z.object({
 
 export function Booking() {
   const [bookingSuccess, setBookingSuccess] = useState<boolean>(false);
-  
+  const [bookingError, setBookingError] = useState<string | null>(null);
+
   const { ref: contentRef } = useScrollAnimation();
   const { ref: formRef } = useScrollAnimation();
-  
+
   const form = useForm<TableBooking>({
     resolver: zodResolver(bookingSchema),
     defaultValues: {
@@ -41,24 +42,50 @@ export function Booking() {
       specialRequests: '',
     },
   });
-  
+
+  // Mutation for your API (if needed, can keep or remove)
+  // Here we just keep it as example
   const mutation = useMutation({
-    mutationFn: bookTable,
+    mutationFn: (data: TableBooking) => Promise.resolve(data), // mock
     onSuccess: () => {
       setBookingSuccess(true);
       form.reset();
-      
-      // Hide success message after 5 seconds
+
       setTimeout(() => {
         setBookingSuccess(false);
       }, 5000);
     },
   });
-  
+
   const onSubmit = (data: TableBooking) => {
-    mutation.mutate(data);
+    setBookingError(null);
+
+    // Use EmailJS to send email
+    emailjs
+      .send(
+        'service_5rfxywh', // your service ID
+        'template_2m82u6s', // your template ID
+        {
+          name: data.name,
+          phone: data.phone,
+          date: data.date,
+          time: data.time,
+          guests: data.guests,
+          occasion: data.occasion || 'N/A',
+          specialRequests: data.specialRequests || 'N/A',
+        },
+        'ytoYtyw0nzlpjQG7E' // your public key
+      )
+      .then(() => {
+        // On successful email send
+        mutation.mutate(data); // if you want to keep your mutation logic
+      })
+      .catch((error) => {
+        setBookingError('Failed to send reservation. Please try again later.');
+        console.error('EmailJS error:', error);
+      });
   };
-  
+
   return (
     <section id="booking" className="py-20 bg-secondary text-white">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
@@ -67,11 +94,11 @@ export function Booking() {
             <span className="text-accent font-script text-3xl">Reserve</span>
             <h2 className="font-display text-4xl font-bold mt-2 mb-6">Book Your Table</h2>
             <div className="w-20 h-1 bg-accent mb-8"></div>
-            
+
             <p className="mb-8 text-neutral-300 leading-relaxed">
               Experience the perfect dining atmosphere at Gusto. Reserve your table now and allow us to craft a memorable culinary journey for you and your companions. For special events and large groups, please call us directly.
             </p>
-            
+
             <div className="flex flex-col space-y-6 mb-8">
               <div className="flex items-start">
                 <i className="fas fa-map-marker-alt text-accent text-xl mt-1 mr-4"></i>
@@ -80,25 +107,33 @@ export function Booking() {
                   <p className="text-neutral-300">123 Gourmet Avenue, Culinary District</p>
                 </div>
               </div>
-              
+
               <div className="flex items-start">
                 <i className="fas fa-clock text-accent text-xl mt-1 mr-4"></i>
                 <div>
                   <h3 className="font-display font-semibold mb-1">Opening Hours</h3>
-                  <p className="text-neutral-300">Mon-Thu: 11:00-23:00<br />Fri-Sun: 11:00-00:00</p>
+                  <p className="text-neutral-300">
+                    Mon-Thu: 11:00-23:00
+                    <br />
+                    Fri-Sun: 11:00-00:00
+                  </p>
                 </div>
               </div>
-              
+
               <div className="flex items-start">
                 <i className="fas fa-phone-alt text-accent text-xl mt-1 mr-4"></i>
                 <div>
                   <h3 className="font-display font-semibold mb-1">Reservations</h3>
-                  <p className="text-neutral-300">+1 (555) 123-4567<br />reservations@gusto-restaurant.com</p>
+                  <p className="text-neutral-300">
+                    +1 (555) 123-4567
+                    <br />
+                    reservations@gusto-restaurant.com
+                  </p>
                 </div>
               </div>
             </div>
           </div>
-          
+
           <div className="bg-black bg-opacity-30 p-8 rounded-lg fade-in" ref={formRef}>
             <Form {...form}>
               <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
@@ -110,8 +145,8 @@ export function Booking() {
                       <FormItem>
                         <FormLabel className="text-sm font-medium mb-2">Full Name</FormLabel>
                         <FormControl>
-                          <Input 
-                            {...field} 
+                          <Input
+                            {...field}
                             placeholder="John Doe"
                             className="w-full px-4 py-3 bg-white bg-opacity-10 border border-gray-600 rounded-sm focus:outline-none focus:ring-2 focus:ring-accent text-white"
                           />
@@ -119,7 +154,7 @@ export function Booking() {
                       </FormItem>
                     )}
                   />
-                  
+
                   <FormField
                     control={form.control}
                     name="phone"
@@ -127,8 +162,8 @@ export function Booking() {
                       <FormItem>
                         <FormLabel className="text-sm font-medium mb-2">Phone Number</FormLabel>
                         <FormControl>
-                          <Input 
-                            {...field} 
+                          <Input
+                            {...field}
                             placeholder="+1 (555) 123-4567"
                             className="w-full px-4 py-3 bg-white bg-opacity-10 border border-gray-600 rounded-sm focus:outline-none focus:ring-2 focus:ring-accent text-white"
                           />
@@ -137,7 +172,7 @@ export function Booking() {
                     )}
                   />
                 </div>
-                
+
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <FormField
                     control={form.control}
@@ -146,26 +181,23 @@ export function Booking() {
                       <FormItem>
                         <FormLabel className="text-sm font-medium mb-2">Date</FormLabel>
                         <FormControl>
-                          <Input 
-                            type="date" 
-                            {...field} 
+                          <Input
+                            type="date"
+                            {...field}
                             className="w-full px-4 py-3 bg-white bg-opacity-10 border border-gray-600 rounded-sm focus:outline-none focus:ring-2 focus:ring-accent text-white"
                           />
                         </FormControl>
                       </FormItem>
                     )}
                   />
-                  
+
                   <FormField
                     control={form.control}
                     name="time"
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel className="text-sm font-medium mb-2">Time</FormLabel>
-                        <Select 
-                          onValueChange={field.onChange} 
-                          defaultValue={field.value}
-                        >
+                        <Select onValueChange={field.onChange} defaultValue={field.value}>
                           <FormControl>
                             <SelectTrigger className="w-full px-4 py-3 bg-white bg-opacity-10 border border-gray-600 rounded-sm focus:outline-none focus:ring-2 focus:ring-accent text-white">
                               <SelectValue placeholder="Select Time" />
@@ -188,7 +220,7 @@ export function Booking() {
                     )}
                   />
                 </div>
-                
+
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <FormField
                     control={form.control}
@@ -196,10 +228,7 @@ export function Booking() {
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel className="text-sm font-medium mb-2">Number of Guests</FormLabel>
-                        <Select 
-                          onValueChange={field.onChange} 
-                          defaultValue={field.value}
-                        >
+                        <Select onValueChange={field.onChange} defaultValue={field.value}>
                           <FormControl>
                             <SelectTrigger className="w-full px-4 py-3 bg-white bg-opacity-10 border border-gray-600 rounded-sm focus:outline-none focus:ring-2 focus:ring-accent text-white">
                               <SelectValue placeholder="Select Number" />
@@ -218,17 +247,14 @@ export function Booking() {
                       </FormItem>
                     )}
                   />
-                  
+
                   <FormField
                     control={form.control}
                     name="occasion"
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel className="text-sm font-medium mb-2">Occasion (Optional)</FormLabel>
-                        <Select 
-                          onValueChange={field.onChange} 
-                          defaultValue={field.value}
-                        >
+                        <Select onValueChange={field.onChange} defaultValue={field.value}>
                           <FormControl>
                             <SelectTrigger className="w-full px-4 py-3 bg-white bg-opacity-10 border border-gray-600 rounded-sm focus:outline-none focus:ring-2 focus:ring-accent text-white">
                               <SelectValue placeholder="Select Occasion" />
@@ -246,7 +272,7 @@ export function Booking() {
                     )}
                   />
                 </div>
-                
+
                 <FormField
                   control={form.control}
                   name="specialRequests"
@@ -254,8 +280,8 @@ export function Booking() {
                     <FormItem>
                       <FormLabel className="text-sm font-medium mb-2">Special Requests</FormLabel>
                       <FormControl>
-                        <Textarea 
-                          {...field} 
+                        <Textarea
+                          {...field}
                           rows={3}
                           placeholder="Any dietary restrictions or special requests?"
                           className="w-full px-4 py-3 bg-white bg-opacity-10 border border-gray-600 rounded-sm focus:outline-none focus:ring-2 focus:ring-accent text-white"
@@ -264,9 +290,9 @@ export function Booking() {
                     </FormItem>
                   )}
                 />
-                
+
                 <div className="text-center">
-                  <Button 
+                  <Button
                     type="submit"
                     disabled={mutation.isPending}
                     className="bg-accent hover:bg-opacity-90 transition-all text-white py-3 px-8 rounded-sm uppercase text-sm tracking-wider font-medium inline-block w-full"
@@ -276,7 +302,7 @@ export function Booking() {
                 </div>
               </form>
             </Form>
-            
+
             {bookingSuccess && (
               <Alert className="bg-success bg-opacity-20 border border-success text-white p-4 rounded-sm mt-6">
                 <div className="flex items-start">
@@ -285,6 +311,15 @@ export function Booking() {
                     <h3 className="font-display font-semibold mb-1">Reservation Successful!</h3>
                     <p>Thank you for your reservation. We'll send a confirmation to your phone shortly.</p>
                   </AlertDescription>
+                </div>
+              </Alert>
+            )}
+
+            {bookingError && (
+              <Alert className="bg-error bg-opacity-20 border border-error text-white p-4 rounded-sm mt-6">
+                <div className="flex items-start">
+                  <i className="fas fa-exclamation-circle text-error text-xl mt-1 mr-3"></i>
+                  <AlertDescription>{bookingError}</AlertDescription>
                 </div>
               </Alert>
             )}

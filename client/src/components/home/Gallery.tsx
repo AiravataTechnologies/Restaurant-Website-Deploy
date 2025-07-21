@@ -33,48 +33,48 @@ export function Gallery() {
     setCurrentImageIndex((currentImageIndex + 1) % galleryImages.length);
   };
   
-  // If no API data, use fallback gallery data
-  const hasGalleryData = galleryImages.length > 0;
-  
+  // Force use of local images (disable API images)
+  const hasGalleryData = false; // Changed to false to force local images
+
   const fallbackGalleryImages = [
     {
       id: 1,
-      src: "https://pixabay.com/get/gcbac02ec206f1adcd34c0b746b40c8d13b5e2ea639faeb361ebe821365a5ae8a72cf7e851439d5d55b144a200ae138b0e6f63cb90e184706ca4f2e1142accc39_1280.jpg",
+      src: "/images/gallery/dish1.jpg",
       alt: "Gourmet dish presentation"
     },
     {
       id: 2,
-      src: "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=600",
+      src: "/images/gallery/restaurant-interior.jpg",
       alt: "Restaurant interior ambiance"
     },
     {
       id: 3,
-      src: "https://pixabay.com/get/gdf6f0bf5a1e040c1a80148dbb6ddf3cf43c7cbcd4744a40e17f1e3536e16e1a566e339ccaff4641fe79af16ae85938ad65ab4c18e3eaa202174687565c08437d_1280.jpg",
+      src: "/images/gallery/chef-cooking.jpg",
       alt: "Chef preparing food"
     },
     {
       id: 4,
-      src: "https://images.unsplash.com/photo-1536935338788-846bb9981813?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=600",
+      src: "/images/gallery/bartender.jpg",
       alt: "Bartender crafting cocktail"
     },
     {
       id: 5,
-      src: "https://images.unsplash.com/photo-1546039907-7fa05f864c02?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=600",
+      src: "/images/gallery/dessert.jpg",
       alt: "Artisan dessert"
     },
     {
       id: 6,
-      src: "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=600",
+      src: "/images/gallery/table-setting.jpg",
       alt: "Elegant table setting"
     },
     {
       id: 7,
-      src: "https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=600",
+      src: "/images/gallery/wine-service.jpg",
       alt: "Wine service"
     },
     {
       id: 8,
-      src: "https://images.unsplash.com/photo-1554679665-f5537f187268?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=600",
+      src: "/images/gallery/evening-service.jpg",
       alt: "Restaurant during evening service"
     }
   ];
