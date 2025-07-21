@@ -1,6 +1,4 @@
-import { storage } from '../server/storage.js';
-import { insertTableBookingSchema } from '../shared/schema.js';
-import { z } from 'zod';
+import { storage } from './storage.js';
 
 export default async function handler(req, res) {
   // Set CORS headers
@@ -16,10 +14,16 @@ export default async function handler(req, res) {
 
   if (req.method === 'POST') {
     try {
-      const validatedData = insertTableBookingSchema.parse(req.body);
+      // Basic validation
+      const { name, phone, date, time, guests } = req.body;
+      if (!name || !phone || !date || !time || !guests) {
+        return res.status(400).json({ 
+          message: "Missing required fields: name, phone, date, time, guests" 
+        });
+      }
       
       // Create booking in database
-      const booking = await storage.createTableBooking(validatedData);
+      const booking = await storage.createTableBooking(req.body);
 
       // Send WhatsApp notification to restaurant owner
       try {
@@ -39,12 +43,6 @@ export default async function handler(req, res) {
         });
       }
     } catch (error) {
-      if (error instanceof z.ZodError) {
-        return res.status(400).json({ 
-          message: "Invalid booking data", 
-          errors: error.errors 
-        });
-      }
       console.error("Booking error:", error);
       res.status(500).json({ message: "Failed to create booking" });
     }
