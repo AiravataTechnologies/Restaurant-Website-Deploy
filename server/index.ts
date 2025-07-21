@@ -60,10 +60,7 @@ app.use((req, res, next) => {
   // this serves both the API and the client.
   // It is the only port that is not firewalled.
   const port = 5000;
-  server.listen({
-  port,
-  host: "127.0.0.1", // 👈 Force IPv4 loopback address
-}, () => {
-  log(`serving on port ${port}`);
-});
+  server.listen(port, "0.0.0.0", () => {
+    log(`serving on port ${port}`);
+  });
 })();
