@@ -30,14 +30,21 @@ export function Hero() {
             className="bg-accent hover:bg-opacity-90 transition-all text-white py-3 px-8 rounded-sm uppercase text-sm tracking-wider font-medium"
           >
             Explore Our Menu
-          </Button>
+{/*           </Button>
           <Button 
             onClick={() => scrollToSection('booking')}
             variant="outline"
             className="border-2 border-white hover:bg-white hover:text-secondary transition-all text-white py-3 px-8 rounded-sm uppercase text-sm tracking-wider font-medium"
           >
             Book a Table
-          </Button>
+          </Button> */}
+            <Button
+  onClick={() => scrollToSection('booking')}
+  className="bg-transparent border-2 border-white text-white hover:bg-white hover:text-black transition-all py-3 px-8 rounded-sm uppercase text-sm tracking-wider font-medium"
+>
+  Book a Table
+        </Button>
+
         </div>
       </div>
       
